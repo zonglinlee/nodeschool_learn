@@ -7,6 +7,12 @@ const fileStream = fs.createReadStream(cityIdFilePath)
 let cityIdMaps = {}
 
 async function readExcel() {
+    fileStream.on('data', (chunk) => {
+        console.log(`Received ${chunk.length} bytes of data.`)
+    })
+    fileStream.on('end', () => {
+        console.log('There will be no more data.')
+    })
     return workbook.xlsx.read(fileStream).then((res) => {
         const { _worksheets } = res
         // console.log(_worksheets.length)

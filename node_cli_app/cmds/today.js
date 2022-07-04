@@ -7,23 +7,27 @@ const path = require('path')
 const jsonPath = path.resolve(__dirname + '/../cityId.json')
 const jsonExist = fs.existsSync(jsonPath)
 let cityIdMaps = null
-if (jsonExist) {
-    cityIdMaps = require(jsonPath)
-} else {
-    readExcel().then(async (res) => {
-        cityIdMaps = res
-        // console.log(cityIdMaps)
-        fs.writeFile(jsonPath, JSON.stringify(res), function (err) {
-            if (err) {
-                console.error(err, `json文件写入失败`)
-            }
+// console.log('jsonExist:', jsonExist)
+
+async function getJsonFileThenGetWeather(args) {
+    if (jsonExist) {
+        cityIdMaps = require(jsonPath)
+        await getWeather(args)
+    } else {
+        readExcel().then(async (res) => {
+            cityIdMaps = res
+            await getWeather(args)
+            fs.writeFile(jsonPath, JSON.stringify(res), function (err) {
+                if (err) {
+                    console.error(err, `json文件写入失败`)
+                }
+            })
         })
-        await getWeather()
-    })
+    }
 }
+
 async function getWeather(args) {
     const location = args.location || args.l
-    console.log(location)
     // console.log(Object.keys(cityIdMaps))
     let locationMatch = Object.keys(cityIdMaps).find((item) =>
         item.toLowerCase().includes(location.toLowerCase())
@@ -62,4 +66,5 @@ async function getWeather(args) {
 }
 module.exports = {
     getWeather,
+    getJsonFileThenGetWeather,
 }

@@ -4,3 +4,5 @@ node_modules/
 .vscode/
 yarn-error.log
 package-lock.json
+node_cli_app/cityId.json
+node_cli_app/node_modules/

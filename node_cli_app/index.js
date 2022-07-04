@@ -2,7 +2,7 @@
 const parseArgv = require('minimist')
 const argvObj = parseArgv(process.argv.slice(2))
 const error = require('./cmds/error')
-const { getWeather } = require('./cmds/today')
+const { getJsonFileThenGetWeather } = require('./cmds/today')
 // console.log(argvObj)
 let cmd = argvObj._[0] || 'help'
 if (argvObj.help || argvObj.h) {
@@ -13,7 +13,7 @@ if (argvObj.version || argvObj.v) {
 }
 switch (cmd) {
     case 'today':
-        getWeather(argvObj)
+        getJsonFileThenGetWeather(argvObj)
         break
     case 'version':
         require('./cmds/version')(argvObj)
